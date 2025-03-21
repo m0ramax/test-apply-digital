@@ -1,4 +1,4 @@
-import { allGames, availableFilters, delay } from "@/utils/endpoint";
+import { allGames, availableFilters, delay } from "../../../utils/endpoint";
 
 const ITEMS_PER_PAGE = 12;
 
