@@ -1,6 +1,6 @@
 "use client";
 import { createContext, useContext, useState, useEffect } from "react";
-import { Game } from "../utils/endpoint";
+import { Game } from "../types";
 
 interface CartItem extends Game {
   quantity: number;
@@ -10,10 +10,11 @@ interface CartContextType {
   items: CartItem[];
   addToCart: (game: Game) => void;
   removeFromCart: (gameId: string) => void;
+  updateQuantity: (id: string, quantity: number) => void;
   clearCart: () => void;
 }
 
-const CartContext = createContext<CartContextType | null>(null);
+export const CartContext = createContext<CartContextType | null>(null);
 
 const CART_STORAGE_KEY = "game-store-cart";
 
@@ -21,21 +22,20 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
 
   useEffect(() => {
-    try{
+    try {
       const savedCart = localStorage.getItem(CART_STORAGE_KEY);
       if (savedCart) {
         setItems(JSON.parse(savedCart));
       }
-    }catch(error){
-      console.error(error)
-      setItems([])
+    } catch (error) {
+      console.error(error);
+      setItems([]);
     }
-    
   }, []);
 
-  useEffect(()=> {
-    localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(items))
-  }, [items])
+  useEffect(() => {
+    localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(items));
+  }, [items]);
 
   const addToCart = (game: Game) => {
     setItems((prev) => {
@@ -56,10 +56,19 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const clearCart = () => {
     setItems([]);
   };
+  const updateQuantity = (id: string, quantity: number) => {
+    if (quantity < 1) {
+      removeFromCart(id);
+      return;
+    }
+    setItems((prev) =>
+      prev.map((item) => (item.id === id ? { ...item, quantity } : item))
+    );
+  };
 
   return (
     <CartContext.Provider
-      value={{ items, addToCart, removeFromCart, clearCart }}
+      value={{ items, addToCart, removeFromCart, updateQuantity, clearCart }}
     >
       {children}
     </CartContext.Provider>
