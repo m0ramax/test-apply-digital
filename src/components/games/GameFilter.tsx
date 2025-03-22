@@ -2,7 +2,7 @@
 
 import { useTransition } from "react";
 import { availableFilters } from "../../utils/endpoint";
-import { useGameFilters } from "../../hooks/useGameFilters";
+import { useGameFilters } from "../../hooks/games/useGameFilters";
 
 export default function GameFilter() {
   const [isPending, startTransition] = useTransition();

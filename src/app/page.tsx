@@ -1,6 +1,6 @@
 "use client";
 
-import { useGameFilters } from "../hooks/useGameFilters";
+import { useGameFilters } from "../hooks/games/useGameFilters";
 import GameFilter from "../components/games/GameFilter";
 import GameList from "../components/games/GameList";
 
