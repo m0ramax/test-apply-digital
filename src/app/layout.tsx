@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Archivo } from "next/font/google";
 import "./globals.css";
 import { CartProvider } from "../context/CartContext";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 const archivo = Archivo({ subsets: ["latin"] });
 
@@ -12,13 +14,19 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="en">
       <body className={archivo.className}>
-        <CartProvider>{children}</CartProvider>
+        <CartProvider>
+          <div className="flex min-h-screen flex-col w-full">
+            <Header />
+            <div className="flex-grow">{children}</div>
+            <Footer />
+          </div>
+        </CartProvider>
       </body>
     </html>
   );
