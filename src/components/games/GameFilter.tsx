@@ -1,27 +1,11 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
-import { availableFilters } from "../utils/endpoint";
 import { useTransition } from "react";
-import { useGameFilters } from "../hooks/useGameFilters";
+import { availableFilters } from "../../utils/endpoint";
+import { useGameFilters } from "../../hooks/useGameFilters";
 
-export default function Filter() {
-  // const router = useRouter();
-  // const searchParams = useSearchParams();
-  // const currentGenre = searchParams.get("genre");
+export default function GameFilter() {
   const [isPending, startTransition] = useTransition();
-  // // const [isLoading, setIsLoading] = useState(false);
-
-  // const handleGenreChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-  //   const genre = event.target.value;
-  //   startTransition(() => {
-  //     if (genre === "All") {
-  //       router.push("/")
-  //     } else {
-  //       router.push(`/?genre=${genre.toLowerCase()}`);
-  //     }
-  //   });
-  // };
   const { genre, setGenre } = useGameFilters();
 
   const handleGenreChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
