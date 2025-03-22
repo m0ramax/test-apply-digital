@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Archivo } from "next/font/google";
 import "./globals.css";
+import { CartProvider } from "../context/CartContext";
+import Header from "../components/layout/Header";
+import Footer from "../components/layout/Footer";
 
-const inter = Inter({ subsets: ["latin"] });
+const archivo = Archivo({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Apply Digital Test",
@@ -11,12 +14,20 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={archivo.className}>
+        <CartProvider>
+          <div className="flex min-h-screen flex-col w-full">
+            <Header />
+            <div className="flex-grow">{children}</div>
+            <Footer />
+          </div>
+        </CartProvider>
+      </body>
     </html>
   );
 }

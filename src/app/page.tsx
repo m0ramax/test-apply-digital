@@ -1,7 +1,19 @@
-export default async function Home() {
+"use client";
+
+import { useGameFilters } from "../hooks/games/useGameFilters";
+import GameFilter from "../components/games/GameFilter";
+import GameList from "../components/games/GameList";
+
+export default function Home() {
+  const { genre } = useGameFilters();
   return (
-    <main className='flex min-h-screen flex-col items-center justify-between p-24 font-bold text-4xl text-blue-600'>
-      Hello, world!
-    </main>
-  )
+    <>
+      <GameFilter />
+      <div className="px-4 md:px-8 lg:px-12">
+        <div className="w-full max-w-[1440px] mx-auto my-8">
+          <GameList genre={genre} />
+        </div>
+      </div>
+    </>
+  );
 }
