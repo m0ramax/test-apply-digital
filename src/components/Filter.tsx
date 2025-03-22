@@ -2,24 +2,31 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { availableFilters } from "../utils/endpoint";
-import { useState, useTransition } from "react";
+import { useTransition } from "react";
+import { useGameFilters } from "../hooks/useGameFilters";
 
 export default function Filter() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const currentGenre = searchParams.get("genre");
+  // const router = useRouter();
+  // const searchParams = useSearchParams();
+  // const currentGenre = searchParams.get("genre");
   const [isPending, startTransition] = useTransition();
-  // const [isLoading, setIsLoading] = useState(false);
+  // // const [isLoading, setIsLoading] = useState(false);
+
+  // const handleGenreChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  //   const genre = event.target.value;
+  //   startTransition(() => {
+  //     if (genre === "All") {
+  //       router.push("/")
+  //     } else {
+  //       router.push(`/?genre=${genre.toLowerCase()}`);
+  //     }
+  //   });
+  // };
+  const { genre, setGenre } = useGameFilters();
 
   const handleGenreChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const genre = event.target.value;
-    startTransition(() => {
-      if (genre === "All") {
-        router.push("/")
-      } else {
-        router.push(`/?genre=${genre.toLowerCase()}`);
-      }
-    });
+    const selectedGenre = event.target.value;
+    setGenre(selectedGenre === "All" ? null : selectedGenre);
   };
 
   return (
@@ -32,7 +39,7 @@ export default function Filter() {
           <div className="relative">
             <select
               id="genre"
-              value={currentGenre?.toLowerCase() || "All"}
+              value={genre?.toLowerCase() || "All"}
               onChange={handleGenreChange}
               disabled={isPending}
               className={`px-4 py-2 rounded-lg bg-slate-600 text-white border border-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
