@@ -19,28 +19,50 @@ export default function GameCard({ game }: CardProps) {
       addToCart(game);
     }
   };
+
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-      <div className="relative aspect-video">
-        <Image src={game.image} alt={game.name} fill className="object-cover" />
+    <div className="w-full h-full border-[0.5px] border-primary-base rounded-2xl overflow-hidden p-4 flex flex-col">
+      <div className="relative w-full aspect-[4/3]">
+        <Image
+          src={game.image}
+          alt={game.name}
+          fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          className="w-full rounded-t-2xl overflow-hidden aspect-1_16 md:aspect-1_38 bg-primary-base"
+          priority
+        />
         {game.isNew && (
-          <span className="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 text-xs rounded">
+          <span className="bg-primary-tag font-normal text-base text-primary-base rounded px-2 py-1 pointer-events-none absolute m-3">
             New
           </span>
         )}
       </div>
-      <div className="p-4">
-        <h2 className="text-xl font-bold mb-2">{game.name}</h2>
-        <p className="text-gray-600 mb-4">{game.description}</p>
-        <div className="flex items-center justify-between">
-          <span className="text-lg font-bold">${game.price}</span>
+
+      <div className="flex flex-col flex-1 p-3">
+        <p className="text-sm text-gray-500 uppercase mb-1">{game.genre}</p>
+        <div className="w-full flex justify-between">
+          <h2 className="font-medium text-gray-900 mb-2">{game.name}</h2>
+          <span className="block text-base font-medium text-gray-900 mb-2">
+            ${game.price.toFixed(0)}
+          </span>
+        </div>
+        <div className="mt-auto">
           <button
             onClick={handleClick}
-            className={`px-4 py-2 rounded-lg transition-colors ${
-              isInCart
-                ? "bg-red-500 hover:bg-red-600 text-white"
-                : "bg-blue-500 hover:bg-blue-600 text-white"
-            }`}
+            className={`
+              w-full
+              h-10
+              px-3 py-1 
+              text-xs font-medium 
+              rounded-lg
+              transition-colors
+              uppercase 
+              ${
+                isInCart
+                  ? "bg-red-500 hover:bg-red-600 text-white"
+                  : "border border-primary-base hover:bg-[#EEEEEE] text-primary-base"
+              }
+            `}
           >
             {isInCart ? "Remove" : "Add to Cart"}
           </button>

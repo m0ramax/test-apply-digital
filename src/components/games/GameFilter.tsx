@@ -10,40 +10,46 @@ export default function GameFilter() {
 
   const handleGenreChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedGenre = event.target.value;
-    setGenre(selectedGenre === "All" ? null : selectedGenre);
+    startTransition(() => {
+      setGenre(selectedGenre === "All" ? null : selectedGenre);
+    });
   };
 
   return (
-    <div className="w-full bg-slate-700">
-      <div className="max-w-[1440px] mx-auto px-4 md:px-8 lg:px-12 py-4">
-        <div className="flex items-center gap-2">
-          <label htmlFor="genre" className="text-white font-medium">
-            Filter by Genre
-          </label>
-          <div className="relative">
+    <div className="w-full px-4 md:px-8">
+      <div className="max-w-6xl mx-auto">
+        <section className="grid gap-8 md:gap-12">
+          <section className="grid gap-3 pt-8 md:pt-12">
+            <h1 className="text-2xl md:text-4xl font-bold">Top Sellers</h1>
+          </section>
+          <div className="grid grid-cols-2 md:flex md:justify-end w-full items-center">
+            <label
+              htmlFor="genre"
+              className="text-xl font-bold pl-4 md:pl-0 py-2 border-r border-border_contrast md:pr-6"
+            >
+              Genre
+            </label>
             <select
               id="genre"
               value={genre?.toLowerCase() || "All"}
               onChange={handleGenreChange}
               disabled={isPending}
-              className={`px-4 py-2 rounded-lg bg-slate-600 text-white border border-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+              className={`w-full md:w-auto text-xl py-4 pl-4 bg-transparent border-none outline-none cursor-pointer ${
                 isPending ? "opacity-50 cursor-not-allowed" : ""
               }`}
             >
-              <option value="All">All Games</option>
+              <option value="All">All</option>
               {availableFilters.map((genre) => (
-                <option key={genre} value={genre.toLowerCase()}>
+                <option 
+                  key={genre} 
+                  value={genre.toLowerCase()}
+                >
                   {genre}
                 </option>
               ))}
             </select>
-            {isPending && (
-              <div className="absolute right-2 top-1/2 -translate-y-1/2">
-                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-              </div>
-            )}
           </div>
-        </div>
+        </section>
       </div>
     </div>
   );

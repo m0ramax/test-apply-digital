@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Game } from "../../types";
-import { gamesService } from "../../services/games.service";
+import { gamesService } from "../../services/games";
 
 export function useGames(initialGenre?: string) {
   const [games, setGames] = useState<Game[]>([]);

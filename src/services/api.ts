@@ -1,7 +1,7 @@
 import { allGames, delay } from "../utils/endpoint";
 import { CONFIG } from "../config/";
 
-export async function GET(request: Request) {
+export async function getGames(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const genre = searchParams.get("genre");
