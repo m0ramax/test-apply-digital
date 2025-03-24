@@ -2,8 +2,7 @@ import { renderHook, act } from "@testing-library/react";
 import { useGames } from "@/hooks/games/useGames";
 import { gamesService } from "@/services/games";
 
-// Mock the games service
-jest.mock("@/services/games.service", () => ({
+jest.mock("@/services/games", () => ({
   gamesService: {
     getGames: jest.fn(),
   },
@@ -28,23 +27,20 @@ const mockGamesResponse = {
 describe("useGames", () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    // Default success response
     (gamesService.getGames as jest.Mock).mockResolvedValue(mockGamesResponse);
   });
 
   it("should fetch games on initial render", async () => {
     const { result } = renderHook(() => useGames());
 
-    // Initial state
     expect(result.current.isLoading).toBe(true);
     expect(result.current.games).toHaveLength(0);
 
-    // Wait for the fetch to complete
+    // Wait for the initial fetch to complete
     await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 0));
+      await Promise.resolve();
     });
 
-    // Check final state
     expect(result.current.isLoading).toBe(false);
     expect(result.current.games).toEqual(mockGamesResponse.games);
     expect(result.current.hasMore).toBe(true);
@@ -57,47 +53,38 @@ describe("useGames", () => {
     });
 
     await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 0));
+      await Promise.resolve();
     });
 
-    // Verify service was called with genre
     expect(gamesService.getGames).toHaveBeenCalledWith(1, "action");
 
-    // Change genre
-    rerender({ genre: "adventure" });
-
     await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 0));
+      rerender({ genre: "adventure" });
+      await Promise.resolve();
     });
 
-    // Verify service was called with new genre
     expect(gamesService.getGames).toHaveBeenCalledWith(1, "adventure");
   });
 
   it("should load more games when loadMore is called", async () => {
     const { result } = renderHook(() => useGames());
 
-    // Wait for initial load
     await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 0));
+      await Promise.resolve();
     });
 
-    // Mock second page response
     const secondPageResponse = {
       games: [{ ...mockGamesResponse.games[0], id: "2" }],
       hasMore: false,
       totalGames: 2,
     };
-    (gamesService.getGames as jest.Mock).mockResolvedValueOnce(
-      secondPageResponse
-    );
+    (gamesService.getGames as jest.Mock).mockResolvedValueOnce(secondPageResponse);
 
-    // Call loadMore
     await act(async () => {
       result.current.loadMore();
+      await Promise.resolve();
     });
 
-    // Should have both pages of games
     expect(result.current.games).toHaveLength(2);
     expect(result.current.hasMore).toBe(false);
   });
@@ -111,7 +98,7 @@ describe("useGames", () => {
     const { result } = renderHook(() => useGames());
 
     await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 0));
+      await Promise.resolve();
     });
 
     expect(result.current.error).toBe(errorMessage);
@@ -121,12 +108,11 @@ describe("useGames", () => {
   it("should not load more if already loading", async () => {
     const { result } = renderHook(() => useGames());
 
-    // Trigger loadMore while loading
-    act(() => {
+    await act(async () => {
       result.current.loadMore();
+      await Promise.resolve();
     });
 
-    // Service should only be called once (initial load)
     expect(gamesService.getGames).toHaveBeenCalledTimes(1);
   });
 
@@ -139,14 +125,14 @@ describe("useGames", () => {
     const { result } = renderHook(() => useGames());
 
     await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 0));
+      await Promise.resolve();
     });
 
-    act(() => {
+    await act(async () => {
       result.current.loadMore();
+      await Promise.resolve();
     });
 
-    // Service should only be called once (initial load)
     expect(gamesService.getGames).toHaveBeenCalledTimes(1);
   });
 });
