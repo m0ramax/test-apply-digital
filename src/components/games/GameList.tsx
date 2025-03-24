@@ -31,21 +31,21 @@ export default function GameList({ genre }: GameListProps) {
 
   return (
     <div className="space-y-8">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-12 max-w-6xl mx-auto">
         {games.map((game) => (
           <GameCard key={game.id} game={game} />
         ))}
       </div>
       {hasMore && (
-        <div className="flex justify-center my-8">
+        <div className="max-w-6xl mx-auto">
           <button
             onClick={loadMore}
             disabled={isLoading}
-            className={`px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors ${
+            className={`px-6 py-2 bg-[#585660] text-white rounded-lg hover:opacity-75 transition-colors uppercase ${
               isLoading ? "opacity-50 cursor-not-allowed" : ""
             }`}
           >
-            {isLoading ? "Loading..." : "Load More"}
+            {isLoading ? "Loading..." : "See More"}
           </button>
         </div>
       )}
