@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
-import { Game } from "../../types";
-import { gamesService } from "../../services/games";
+import { useState, useEffect, useCallback } from "react";
+import { Game } from "@/types";
+import { gamesService } from "@/services/games";
 
 export function useGames(initialGenre?: string) {
   const [games, setGames] = useState<Game[]>([]);
@@ -9,7 +9,7 @@ export function useGames(initialGenre?: string) {
   const [error, setError] = useState<string | null>(null);
   const [page, setPage] = useState(1);
 
-  const fetchGames = async (currentPage: number, isLoadMore = false) => {
+  const fetchGames = useCallback(async (currentPage: number, isLoadMore = false) => {
     try {
       setIsLoading(true);
       const data = await gamesService.getGames(currentPage, initialGenre);
@@ -21,13 +21,13 @@ export function useGames(initialGenre?: string) {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [initialGenre]);
 
   useEffect(() => {
-    setGames([]); // Clear games when genre changes
-    setPage(1); // Reset page
+    setGames([]); 
+    setPage(1);
     fetchGames(1);
-  }, [initialGenre]);
+  }, [fetchGames, initialGenre]);
 
   const loadMore = () => {
     if (!isLoading && hasMore) {
