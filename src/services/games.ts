@@ -8,13 +8,10 @@ export interface GamesResponse {
 }
 
 export const gamesService = {
-  async getGames(page: number = 1, genre?: string): Promise<GamesResponse> {
+  async getGames(page: number = 1, genre?: string | null) {
     try {
-      const params = new URLSearchParams();
-      params.append("page", page.toString());
-      if (genre) {
-        params.append("genre", genre);
-      }
+      const params = new URLSearchParams({ page: page.toString() });
+      if (genre) params.append("genre", genre);
 
       const response = await fetch(`${CONFIG.API.ENDPOINTS.GAMES}?${params}`);
 

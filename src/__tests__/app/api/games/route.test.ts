@@ -1,29 +1,10 @@
 import { GET } from '@/app/api/games/route'
-import { allGames, delay } from '@/utils/endpoint'
+import { getGames } from '@/services/api'
+import { CONFIG } from '@/config'
 
-// Mock the delay and games data
-jest.mock('@/utils/endpoint', () => ({
-  delay: jest.fn().mockResolvedValue(undefined),
-  allGames: [
-    {
-      id: '1',
-      name: 'Test Game 1',
-      genre: 'Action',
-      price: 59.99,
-      image: '/test1.jpg',
-      description: 'Test description 1',
-      isNew: true
-    },
-    {
-      id: '2',
-      name: 'Test Game 2',
-      genre: 'Adventure',
-      price: 49.99,
-      image: '/test2.jpg',
-      description: 'Test description 2',
-      isNew: false
-    }
-  ]
+// Mock the api service
+jest.mock('@/services/api', () => ({
+  getGames: jest.fn()
 }))
 
 describe('Games API Route', () => {
@@ -31,61 +12,72 @@ describe('Games API Route', () => {
     jest.clearAllMocks()
   })
 
-  it('returns all games when no filters applied', async () => {
-    const request = new Request('http://localhost:3000/api/games')
-    const response = await GET(request)
-    const data = await response.json()
+  it('calls getGames service with the request', async () => {
+    const mockRequest = new Request('http://localhost:3000/api/games')
+    const mockResponse = new Response(JSON.stringify({ data: 'test' }))
+    
+    ;(getGames as jest.Mock).mockResolvedValue(mockResponse)
+    const response = await GET(mockRequest)
 
-    expect(data.games).toHaveLength(2)
-    expect(data.totalGames).toBe(2)
-    expect(data.hasMore).toBe(false)
+    expect(getGames).toHaveBeenCalledWith(mockRequest)
+    expect(response).toBe(mockResponse)
   })
 
-  it('filters games by genre case-insensitively', async () => {
-    const request = new Request('http://localhost:3000/api/games?genre=ACTION')
-    const response = await GET(request)
-    const data = await response.json()
+  it('handles requests with genre parameter', async () => {
+    const mockRequest = new Request('http://localhost:3000/api/games?genre=action')
+    const mockResponse = new Response(JSON.stringify({ games: [], totalGames: 0 }))
+    
+    ;(getGames as jest.Mock).mockResolvedValue(mockResponse)
+    const response = await GET(mockRequest)
 
-    expect(data.games).toHaveLength(1)
-    expect(data.games[0].genre).toBe('Action')
-    expect(data.totalGames).toBe(1)
+    expect(getGames).toHaveBeenCalledWith(mockRequest)
+    const data = await response.json()
+    expect(data).toEqual({ games: [], totalGames: 0 })
   })
 
-  it('handles pagination correctly', async () => {
-    const request = new Request('http://localhost:3000/api/games?page=2')
-    const response = await GET(request)
-    const data = await response.json()
+  it('handles requests with page parameter', async () => {
+    const mockRequest = new Request('http://localhost:3000/api/games?page=2')
+    const mockResponse = new Response(JSON.stringify({ games: [], hasMore: false }))
+    
+    ;(getGames as jest.Mock).mockResolvedValue(mockResponse)
+    const response = await GET(mockRequest)
 
-    expect(data.games).toHaveLength(0)
-    expect(data.hasMore).toBe(false)
+    expect(getGames).toHaveBeenCalledWith(mockRequest)
+    const data = await response.json()
+    expect(data).toEqual({ games: [], hasMore: false })
   })
 
-  it('handles invalid page numbers', async () => {
-    const request = new Request('http://localhost:3000/api/games?page=-1')
-    const response = await GET(request)
-    const data = await response.json()
+  it('handles invalid URLs', async () => {
+    const mockRequest = new Request('invalid-url')
+    const mockResponse = new Response(
+      JSON.stringify({ error: 'Internal Server Error' }), 
+      { status: 500 }
+    )
+    
+    ;(getGames as jest.Mock).mockResolvedValue(mockResponse)
+    const response = await GET(mockRequest)
 
-    expect(data.games).toHaveLength(2)
-    expect(delay).toHaveBeenCalledWith(2000)
+    expect(getGames).toHaveBeenCalledWith(mockRequest)
+    expect(response.status).toBe(500)
   })
 
-  it('returns empty array for non-existent genre', async () => {
-    const request = new Request('http://localhost:3000/api/games?genre=nonexistent')
-    const response = await GET(request)
-    const data = await response.json()
+  it('passes through any errors from the service', async () => {
+    const mockRequest = new Request('http://localhost:3000/api/games')
+    const mockError = new Error('Test error')
+    
+    ;(getGames as jest.Mock).mockRejectedValue(mockError)
 
-    expect(data.games).toHaveLength(0)
-    expect(data.totalGames).toBe(0)
-    expect(data.hasMore).toBe(false)
+    await expect(GET(mockRequest)).rejects.toThrow('Test error')
   })
 
-  it('applies both pagination and genre filter', async () => {
-    const request = new Request('http://localhost:3000/api/games?genre=action&page=1')
-    const response = await GET(request)
-    const data = await response.json()
+  it('handles malformed JSON responses', async () => {
+    const mockRequest = new Request('http://localhost:3000/api/games')
+    const mockResponse = new Response('invalid json')
+    
+    ;(getGames as jest.Mock).mockResolvedValue(mockResponse)
+    const response = await GET(mockRequest)
 
-    expect(data.games).toHaveLength(1)
-    expect(data.games[0].genre).toBe('Action')
-    expect(data.totalGames).toBe(1)
+    expect(getGames).toHaveBeenCalledWith(mockRequest)
+    expect(response).toBe(mockResponse)
   })
 })

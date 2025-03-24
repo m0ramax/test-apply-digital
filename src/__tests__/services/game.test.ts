@@ -65,7 +65,9 @@ describe('Games Service', () => {
 
   it('throws error when fetch fails', async () => {
     (global.fetch as jest.Mock).mockResolvedValueOnce({
-      ok: false
+      ok: false,
+      status: 500,
+      statusText: 'Server Error'
     })
 
     await expect(gamesService.getGames()).rejects.toThrow('Failed to fetch games')
@@ -75,6 +77,15 @@ describe('Games Service', () => {
     (global.fetch as jest.Mock).mockRejectedValueOnce(new Error('Network error'))
 
     await expect(gamesService.getGames()).rejects.toThrow('Network error')
+  })
+
+  it('handles malformed JSON response', async () => {
+    (global.fetch as jest.Mock).mockResolvedValueOnce({
+      ok: true,
+      json: () => Promise.reject(new Error('Invalid JSON'))
+    })
+
+    await expect(gamesService.getGames()).rejects.toThrow('Invalid JSON')
   })
 
   it('handles all query parameters together', async () => {
