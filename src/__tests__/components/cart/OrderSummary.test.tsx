@@ -30,17 +30,14 @@ describe('OrderSummary', () => {
   it('renders order summary correctly', () => {
     render(<OrderSummary items={mockItems} total={total} />)
     
-    // Check title and items count
     expect(screen.getByText('Order Summary')).toBeInTheDocument()
     expect(screen.getByText('3 items')).toBeInTheDocument()
     
-    // Check individual items
     mockItems.forEach((item) => {
       expect(screen.getByText(`${item.name} (${item.quantity}x)`)).toBeInTheDocument()
       expect(screen.getByText(`$${(item.price * item.quantity).toFixed(2)}`)).toBeInTheDocument()
     })
     
-    // Check total
     expect(screen.getByText('Order Total')).toBeInTheDocument()
     expect(screen.getByText(`$${total.toFixed(2)}`)).toBeInTheDocument()
   })

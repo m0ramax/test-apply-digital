@@ -28,11 +28,9 @@ describe('RootLayout', () => {
       </RootLayout>
     )
 
-    // Check HTML attributes
     const html = document.documentElement
     expect(html).toHaveAttribute('lang', 'en')
 
-    // Check main components are rendered
     expect(screen.getByTestId('mock-header')).toBeInTheDocument()
     expect(screen.getByTestId('mock-footer')).toBeInTheDocument()
     expect(screen.getByTestId('mock-cart-provider')).toBeInTheDocument()
