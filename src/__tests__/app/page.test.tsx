@@ -1,7 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import Home from '@/app/page'
 
-// Mock the hooks and components
 jest.mock('@/hooks/games/useGameFilters', () => ({
   useGameFilters: () => ({
     genre: 'action'

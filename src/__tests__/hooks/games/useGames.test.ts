@@ -36,7 +36,6 @@ describe("useGames", () => {
     expect(result.current.isLoading).toBe(true);
     expect(result.current.games).toHaveLength(0);
 
-    // Wait for the initial fetch to complete
     await act(async () => {
       await Promise.resolve();
     });

@@ -2,14 +2,12 @@ import { renderHook } from '@testing-library/react'
 import { useGameFilters } from '@/hooks/games/useGameFilters'
 import { useRouter, useSearchParams } from 'next/navigation'
 
-// Mock Next.js navigation hooks
 jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
   useSearchParams: jest.fn()
 }))
 
 describe('useGameFilters', () => {
-  // Setup common mocks
   const mockPush = jest.fn()
   const mockGet = jest.fn()
 

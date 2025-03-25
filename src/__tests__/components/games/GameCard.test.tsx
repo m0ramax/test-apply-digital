@@ -56,7 +56,6 @@ describe('GameCard', () => {
     expect(addButton).toBeInTheDocument()
     
     fireEvent.click(addButton)
-    // The button should remain enabled as we can only add once
     expect(addButton).not.toBeDisabled()
   })
 
