@@ -1,6 +1,6 @@
 "use client";
 import { createContext, useContext, useState, useEffect } from "react";
-import { Game } from "../types";
+import { Game } from "@/types";
 
 interface CartItem extends Game {
   quantity: number;

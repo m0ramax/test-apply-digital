@@ -1,5 +1,5 @@
-import { Game } from "../types";
-import { CONFIG } from "../config";
+import { Game } from "@/types";
+import { CONFIG } from "@/config";
 
 export interface GamesResponse {
   games: Game[];

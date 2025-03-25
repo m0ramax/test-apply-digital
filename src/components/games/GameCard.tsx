@@ -1,8 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { useCart } from "../../context/CartContext";
-import { Game } from "../../types";
+import { useCart } from "@/context/CartContext";
+import { Game } from "@/types";
 
 interface CardProps {
   game: Game;

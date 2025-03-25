@@ -1,6 +1,6 @@
 import { useState, useContext } from "react";
-import { CartContext } from "../../context/CartContext";
-import { Game } from "../../types";
+import { CartContext } from "@/context/CartContext";
+import { Game } from "@/types";
 
 interface CartOperationResult {
   success: boolean;

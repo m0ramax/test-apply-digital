@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Game } from "../../types";
+import { Game } from "@/types";
 
 interface CartItemProps {
   item: Game & { quantity: number };
