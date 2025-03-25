@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useCart } from "../../context/CartContext";
+import { useCart } from "@/context/CartContext";
 
 export default function Header() {
   const { items } = useCart();
@@ -11,7 +11,7 @@ export default function Header() {
     <header className="w-full bg-[#E5E5E5] text-[#585660]">
       <div className="max-w-[1440px] mx-auto py-4 px-4 md:px-8 lg:px-12">
         <div className="flex justify-between max-w-6xl mx-auto">
-          <Link href="/" className="text-2xl font-bold">
+          <Link href="/" className="text-2xl">
             GamerShop
           </Link>
           <Link

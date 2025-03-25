@@ -1,4 +1,4 @@
-import { Game } from "../types";
+import { Game } from "@/types";
 
 // Mock games data
 export const allGames: Game[] = [
