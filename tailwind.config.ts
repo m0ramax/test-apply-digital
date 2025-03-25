@@ -15,11 +15,12 @@ const config: Config = {
       },
       colors: {
         primary: {
-          base: '#3B3B3B',
-          tag: '#F5F5F4',
-          icon: '#8F8F8F',
-        }
-      }
+          base: "#3B3B3B",
+          tag: "#F5F5F4",
+          icon: "#8F8F8F",
+          "card-background": "#E5E5E5",
+        },
+      },
     },
   },
   plugins: [],

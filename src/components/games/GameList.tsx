@@ -1,6 +1,6 @@
 "use client";
 
-import { useGames } from "../../hooks/games/useGames";
+import { useGames } from "@/hooks/games/useGames";
 import GameCard from "./GameCard";
 import Loading from "../common/Loading";
 
